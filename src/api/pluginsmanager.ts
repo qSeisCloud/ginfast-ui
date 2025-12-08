@@ -59,3 +59,8 @@ export const importPluginAPI = (file: File, params: PluginImportRequest) => {
   
   return http.request<any>("post", baseUrlApi("pluginsmanager/import"), { data: formData, headers: { 'Content-Type': 'multipart/form-data' } });
 };
+
+
+export const deletePluginAPI  = (folderName: string) => {
+    return http.request<BaseResult>("delete", baseUrlApi(`pluginsmanager/uninstall?folderName=${encodeURIComponent(folderName)}`));
+};

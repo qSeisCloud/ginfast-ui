@@ -89,10 +89,22 @@
         </a-descriptions-item>
       </a-descriptions>
       <div style="margin-top: 24px; text-align: right;">
-        <a-button type="primary" @click="exportPlugin(currentPlugin)">
-          <template #icon><icon-download /></template>
-          <span>导出插件</span>
-        </a-button>
+        <a-space>
+          <a-button type="primary" @click="exportPlugin(currentPlugin)">
+            <template #icon><icon-download /></template>
+            <span>导出插件</span>
+          </a-button>
+          <a-popconfirm title="确定要卸载此插件吗？" content="卸载后将删除插件的所有文件和数据库表。" type="warning" @ok="handleDeletePlugin">
+            <a-button type="primary" status="danger">
+              <template #icon><icon-delete /></template>
+              <span>卸载插件</span>
+            </a-button>
+          </a-popconfirm>
+          <a-button @click="detailVisible = false">
+            <template #icon><icon-close /></template>
+            <span>退出</span>
+          </a-button>
+        </a-space>
       </div>
     </a-modal>
 
@@ -103,7 +115,7 @@
 
 <script setup lang='ts'>
 import { ref,  onMounted, computed } from 'vue'
-import { getPluginsExportAPI, exportPluginAPI, type PluginExport } from '@/api/pluginsmanager'
+import { getPluginsExportAPI, exportPluginAPI, deletePluginAPI, type PluginExport } from '@/api/pluginsmanager'
 import useGlobalProperties from '@/hooks/useGlobalProperties'
 import { useDevicesSize } from '@/hooks/useDevicesSize'
 import PluginImportModal from './components/PluginImportModal.vue'
@@ -218,6 +230,21 @@ const showImportModal = () => {
 const handleImportSuccess = async () => {
   // 刷新插件列表
   await getPluginsList()
+}
+
+// 删除插件
+const handleDeletePlugin = async () => {
+  try {
+    proxy.$message.loading('插件卸载中...')
+    await deletePluginAPI(currentPlugin.value.folderName)
+    proxy.$message.success('插件卸载成功')
+    detailVisible.value = false
+    // 刷新插件列表
+    await getPluginsList()
+  } catch (error) {
+    console.error(error)
+    proxy.$message.error('插件卸载失败')
+  }
 }
 
 // 初始化
