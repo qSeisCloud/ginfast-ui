@@ -69,7 +69,8 @@
     "vue-router": "^4.3.0",
     "vue-virtual-scroller": "2.0.0-beta.8",
     "vuedraggable": "^4.1.0",
-    "xgplayer": "^3.0.18"
+    "xgplayer": "^3.0.18",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@arco-design/web-vue": "^2.57.0",
@@ -81,6 +82,7 @@
     "@types/node": "^22.13.11",
     "@types/nprogress": "^0.2.3",
     "@types/qs": "^6.14.0",
+    "@types/xlsx": "^0.0.36",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "@vitejs/plugin-vue": "^5.2.1",
