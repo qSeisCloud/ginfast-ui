@@ -1,22 +1,21 @@
 <template>
-    <div class="example-plugin-container snow-fill">
-        <a-card title="示例插件列表" :loading="loading">
-            <template #extra>
-                <a-space>
-                    <a-input-search v-model="searchForm.name" placeholder="请输入名称搜索" style="width: 240px;"
-                        @search="handleSearch" allow-clear />
+<div class="snow-page">
+    <div class="snow-inner" >
+        <a-card title="示例插件列表" :loading="loading" :bordered="false">
+            <a-space wrap>
+                <a-input-search v-model="searchForm.name" placeholder="请输入名称搜索" style="width: 240px;"
+                    @search="handleSearch" allow-clear />
 
-                    <a-button type="primary" @click="handleSearch">查询</a-button>
-                    <a-button @click="handleReset">重置</a-button>
-                    <a-button type="primary" @click="handleCreate" v-hasPerm="['plugins:example:add']">
-                        <template #icon>
-                            <icon-plus />
-                        </template>
-                        <span>新增数据</span>
-                    </a-button>
-                </a-space>
-            </template>
-
+                <a-button type="primary" @click="handleSearch">查询</a-button>
+                <a-button @click="handleReset">重置</a-button>
+                <a-button type="primary" @click="handleCreate" v-hasPerm="['plugins:example:add']">
+                    <template #icon>
+                        <icon-plus />
+                    </template>
+                    <span>新增数据</span>
+                </a-button>
+            </a-space>
+          
             <a-table :data="dataList" :loading="loading" :pagination="paginationConfig"
                 :bordered="{ wrapper: true, cell: true }" @page-change="handlePageChange"
                 @page-size-change="handlePageSizeChange">
@@ -56,6 +55,7 @@
             </a-form>
         </a-modal>
     </div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -206,7 +206,5 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-.example-plugin-container {
 
-}
 </style>

@@ -144,8 +144,8 @@ const previewImage = ref('');
 const uploadingCount = ref(0);
 
 // 监听图片URL数组变化（仅用于初始化）
-watch(() => props.modelValue, (newUrls) => {
-    // 只有当没有正在上传的文件且fileList为空时才初始化，避免覆盖正在上传的文件
+watch(() => props.modelValue, (newUrls:any) => {
+     // 只有当没有正在上传的文件且fileList为空时才初始化，避免覆盖正在上传的文件
     if (uploadingCount.value === 0 ) {
         if (Array.isArray(newUrls) && newUrls.length > 0) {
             fileList.value = newUrls.map((url, index) => ({
