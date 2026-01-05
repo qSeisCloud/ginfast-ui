@@ -2,7 +2,7 @@
     <a-layout-footer class="footer">
         <div class="footer_title" @click="onFooter">{{ systemCopyright }} {{ systemRecordNo }}</div>
         <a-popover position="tl">
-            <div v-if="tenantName" class="footer_tenant">{{ `[租户:${tenantName}]`  }}</div>
+            <div v-if="tenantID > 0" class="footer_tenant">{{ `[租户:${tenantName}]`  }}</div>
             <template #content>
                 <p>租户ID: {{ tenantID }}</p>
                 <p>租户编码: {{ tenantCode }}</p>
