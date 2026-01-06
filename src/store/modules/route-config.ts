@@ -131,13 +131,13 @@ export const routeConfigStore = () => {
         // 后端数据转换成前端所需格式
         let res = await getRoutersAPI();
         let data = convertMenuItemsToRoutes(res.data);
-
+        //console.log("initSetRouter->data", JSON.stringify(data));
         // 2、获取路由树转换的一维路由
         let flatRoute = linearArray(data);
-        //console.log("flatRoute", JSON.stringify(flatRoute));
+        //console.log("initSetRouter->flatRoute", JSON.stringify(flatRoute));
         // 3、将模块设置为真实模块
         let realTree = await moduleReplacement(flatRoute);
-        //console.log("realTree", JSON.stringify(realTree));
+        //console.log("initSetRouter->realTree", JSON.stringify(realTree));
         // 4、动态添加路由
         realTree.forEach((route: any) => {
             if (route.meta.isFull) {

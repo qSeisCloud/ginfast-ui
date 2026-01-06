@@ -5,7 +5,7 @@
         <MenuItemIcon :svg-icon="item.meta.svgIcon" :icon="item.meta.icon" />
       </template>
       <template #title>{{ $t(`menu.${item.meta.title}`) }}</template>
-      <MenuItem :route-tree="item.children" />
+      <MenuItem :route-tree="item.children || []" />
     </a-sub-menu>
     <a-menu-item v-else-if="aMenuShow(item)" :key="item?.path">
       <template #icon v-if="item.meta.svgIcon || item.meta.icon">
