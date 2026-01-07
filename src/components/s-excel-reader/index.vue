@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { read, utils, WorkBook } from 'xlsx';
 import { IconFile } from '@arco-design/web-vue/es/icon';
 
