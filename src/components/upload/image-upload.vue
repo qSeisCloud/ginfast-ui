@@ -44,7 +44,7 @@
             </a-upload>
 
             <!-- 选择按钮（右侧） -->
-            <div class="select-button"
+            <div v-if="showSelectButton" class="select-button"
                  :style="{ width: typeof width === 'number' ? width + 'px' : width, height: typeof height === 'number' ? height + 'px' : height }"
                  :class="{ 'upload-disabled': disabled }"
                  @click="showSelector = true">
@@ -100,11 +100,29 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false
+    },
+    // 缩略图相关参数
+    isThumb: {
+        type: Number,
+        default: 0
+    },
+    thumbWidth: {
+        type: Number,
+        default: 120
+    },
+    thumbHeight: {
+        type: Number,
+        default: 120
+    },
+    // 是否显示右侧选择按钮
+    showSelectButton: {
+        type: Boolean,
+        default: true
     }
 });
 
 // 定义事件
-const emit = defineEmits(['update:modelValue', 'change', 'success', 'error']);
+const emit = defineEmits(['update:modelValue', 'change', 'success', 'error', 'uploadSuccess']);
 
 // 文件状态
 const file = ref<any>(null);
@@ -152,6 +170,12 @@ const handleUpload = async (options: any) => {
     const { fileItem, onError, onSuccess } = options;
     const formData = new FormData();
     formData.append("file", fileItem.file);
+    // 添加缩略图参数
+    if (props.isThumb === 1) {
+        formData.append("isThumb", "1");
+        formData.append("width", props.thumbWidth.toString());
+        formData.append("height", props.thumbHeight.toString());
+    }
 
     // 设置上传中状态
     file.value = {
@@ -178,6 +202,7 @@ const handleUpload = async (options: any) => {
             emit('update:modelValue', res.data.url);
             emit('success', res.data.url);
             emit('change', uploadedFile);
+            emit('uploadSuccess', res.data);
             onSuccess(res);
         } else {
             throw new Error(res.message || '上传失败');
