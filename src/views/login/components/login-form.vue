@@ -28,7 +28,7 @@
                         <a-input style="width: 160px" v-model="form.captchaValue" allow-clear placeholder="请输入验证码" />
                         <!-- <s-verify-code :content-height="30" :font-size-max="30" :content-width="110"
                             @verify-code-change="verifyCodeChange" /> -->
-                        <img :src="captchaImgUrl" :width="captchaWidth" :height="captchaHeight"
+                        <img :src="captchaImgUrl" class="verifyCodeImg" 
                             @click="refreshCaptcha" />
                     </div>
                 </a-form-item>
@@ -52,8 +52,7 @@ import { useRouter } from "vue-router";
 import { useRouteConfigStore } from "@/store/modules/route-config";
 import { useUserStoreHook } from "@/store/modules/user";
 import { onMounted, ref, watch } from "vue";
-import { getCaptchaId } from "@/api/user";
-import { baseUrlApi } from "@/api/utils";
+import { getVerifyImgString } from "@/api/user";
 import { useSystemStore } from "@/store/modules/system";
 import { useSysConfigStore } from "@/store/modules/sys-config";
 
@@ -149,21 +148,13 @@ const onLogin = async () => {
 
 // 验证码
 const captchaImgUrl = ref("");
-const captchaWidth = ref(160);
-const captchaHeight = ref(50);
 const refreshCaptcha = () => {
-    if (!form.value.captchaId) {
-        getCaptchaId().then(res => {
-            form.value.captchaId = res.data.captchaId;
-            captchaImgUrl.value = baseUrlApi(
-                `captcha/image?captchaId=${form.value.captchaId}&width=${captchaWidth.value}&height=${captchaHeight.value}`
-            );
-        });
-    } else {
-        captchaImgUrl.value = baseUrlApi(
-            `captcha/image?captchaId=${form.value.captchaId}&width=${captchaWidth.value}&height=${captchaHeight.value}&time=${new Date().getTime()}`
-        );
-    }
+    getVerifyImgString().then(res => {
+        form.value.captchaId = res.data.captchaId;
+        captchaImgUrl.value = res.data.image;
+    }).catch(err => {
+        console.error("获取验证码失败:", err);
+    });
 };
 
 // 监听系统配置变化，自动更新默认账号密码
@@ -213,5 +204,12 @@ onMounted(async () => {
     color: $color-text-3;
     text-align: center;
     cursor: pointer;
+}
+
+.verifyCodeImg {
+    cursor: pointer;
+    height: 32px;
+    width: 150px;
+    margin-left: 10px;
 }
 </style>
