@@ -2,6 +2,12 @@ import { useSystemStore } from "@/store/modules/system";
 import { storeToRefs } from "pinia";
 import { Message } from "@arco-design/web-vue";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// 配置 dayjs 插件
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 /**
  * 字典解析
@@ -127,14 +133,21 @@ export const throttle = <T extends (...args: any[]) => any>(fn: T, delay: number
 };
 
 /**
- * 格式化时间函数
+ * 格式化时间函数（支持时区转换）
  * @param time 时间值，可以是 Date 对象、时间戳或字符串
  * @param format 格式化模板，默认为 'YYYY-MM-DD HH:mm:ss'
- * @returns 格式化后的时间字符串
+ * @param sourceTimezone 源时区，默认为 'UTC'（后端返回的时间通常为 UTC 时间）
+ * @returns 格式化后的时间字符串（转换为用户本地时区）
  */
-export const formatTime = (time?: dayjs.ConfigType, format: string = "YYYY-MM-DD HH:mm:ss"): string => {
+export const formatTime = (
+  time?: dayjs.ConfigType,
+  format: string = "YYYY-MM-DD HH:mm:ss",
+  sourceTimezone: string = "UTC"
+): string => {
   if (!time) {
+    // 获取当前本地时间并格式化
     return dayjs().format(format);
   }
-  return dayjs(time).format(format);
+  // 将源时区的时间转换为用户本地时区
+  return dayjs.tz(time, sourceTimezone).tz(dayjs.tz.guess()).format(format);
 };

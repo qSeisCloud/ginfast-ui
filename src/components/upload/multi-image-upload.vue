@@ -64,7 +64,7 @@
                 </a-upload>
 
                 <!-- 选择按钮 -->
-                <div class="upload-button"
+                <div v-if="showSelectButton" class="upload-button"
                      :style="{ width: typeof width === 'number' ? width + 'px' : width, height: typeof height === 'number' ? height + 'px' : height }"
                      :class="{ 'upload-disabled': fileList.length >= maxCount }"
                      @click="showSelector = true">
@@ -126,11 +126,29 @@ const props = defineProps({
     maxCount: {
         type: Number,
         default: 10
+    },
+    // 缩略图相关参数
+    isThumb: {
+        type: Number,
+        default: 0
+    },
+    thumbWidth: {
+        type: Number,
+        default: 120
+    },
+    thumbHeight: {
+        type: Number,
+        default: 120
+    },
+    // 是否显示右侧选择按钮
+    showSelectButton: {
+        type: Boolean,
+        default: true
     }
 });
 
 // 定义事件
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'uploadSuccess']);
 
 // 文件列表
 const fileList = ref<any[]>([]);
@@ -186,6 +204,12 @@ const handleUpload = async (options: any) => {
     const { fileItem, onError, onSuccess } = options;
     const formData = new FormData();
     formData.append("file", fileItem.file);
+    // 添加缩略图参数
+    if (props.isThumb === 1) {
+        formData.append("isThumb", "1");
+        formData.append("width", props.thumbWidth.toString());
+        formData.append("height", props.thumbHeight.toString());
+    }
     // 生成唯一ID
     const fileUid = fileItem.uid;
     // 添加到文件列表，显示上传中状态
@@ -219,6 +243,7 @@ const handleUpload = async (options: any) => {
                 .filter(file => file.status === 'done' && file.url)
                 .map(file => file.url);
             emit('update:modelValue', urls);
+            emit('uploadSuccess', res.data);
             onSuccess(res);
         } else {
             throw new Error(res.message || '上传失败');

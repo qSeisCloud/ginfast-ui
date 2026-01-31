@@ -9,8 +9,8 @@ export interface SysGenItem {
     moduleName: string;
     fileName: string;
     describe: string;
-    isCover: boolean;
-    isMenu: boolean;
+    isCover: number;
+    isMenu: number;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;

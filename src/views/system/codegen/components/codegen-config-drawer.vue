@@ -25,14 +25,16 @@
                             </a-col>
                             <a-col :span="12">
                                 <a-form-item label="是否覆盖" field="isCover">
-                                    <a-checkbox v-model="editForm.isCover">
+                                    <a-checkbox :model-value="Boolean(editForm.isCover)"
+                                        @update:model-value="editForm.isCover = $event ? 1 : 0">
                                         是否覆盖已存在的文件
                                     </a-checkbox>
                                 </a-form-item>
                             </a-col>
                             <a-col :span="12">
                                 <a-form-item label="是否生成菜单" field="isMenu">
-                                    <a-checkbox v-model="editForm.isMenu">
+                                    <a-checkbox :model-value="Boolean(editForm.isMenu)"
+                                        @update:model-value="editForm.isMenu = $event ? 1 : 0">
                                         是否生成菜单
                                     </a-checkbox>
                                 </a-form-item>
@@ -222,8 +224,8 @@ const editForm = ref<SysGenItem>({
     moduleName: "",
     fileName: "",
     describe: "",
-    isCover: false,
-    isMenu: false,
+    isCover: 0,
+    isMenu: 0,
     createdAt: "",
     updatedAt: "",
     deletedAt: null,
@@ -304,8 +306,8 @@ const handleCancel = () => {
         moduleName: "",
         fileName: "",
         describe: "",
-        isCover: false,
-        isMenu: false,
+        isCover: 0,
+        isMenu: 0,
         createdAt: "",
         updatedAt: "",
         deletedAt: null,

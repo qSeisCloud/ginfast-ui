@@ -52,9 +52,11 @@ export type ProfileItem = {
 
 export type ProfileResult = BaseResult<ProfileItem>;
 
-export type CaptchaIdResult = BaseResult<{
+
+
+export type VerifyImgResult = BaseResult<{
     captchaId: string;
-    imgUrl: string;
+    image: string;
 }>;
 
 // 用户
@@ -111,9 +113,11 @@ export const getProfileAPI = () => {
     return http.request<ProfileResult>("get", baseUrlApi("users/profile"));
 };
 
-/** 获取验证码id */
-export const getCaptchaId = () => {
-    return http.request<CaptchaIdResult>("get", baseUrlApi("captcha/id"));
+
+
+/** 获取验证码图片字符串 */
+export const getVerifyImgString = () => {
+    return http.request<VerifyImgResult>("get", baseUrlApi("captcha/verify"));
 };
 
 // 获取用户列表
