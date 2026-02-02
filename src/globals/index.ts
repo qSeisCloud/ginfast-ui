@@ -134,43 +134,79 @@ export const throttle = <T extends (...args: any[]) => any>(fn: T, delay: number
 
 /**
  * 格式化时间函数（支持时区转换）
- * @param time 时间值，可以是 Date 对象、时间戳或字符串
+ * @param time 时间值，可以是 Date 对象、时间戳或字符串，为空时返回当前时间
  * @param format 格式化模板，默认为 'YYYY-MM-DD HH:mm:ss'
- * @param sourceTimezone 源时区，默认为 'UTC'（后端返回的时间通常为 UTC 时间）
- * @returns 格式化后的时间字符串（转换为用户本地时区）
+ * @param sourceTimezone 源时区，默认为 'UTC'。设置为 null 或空字符串时跳过时区转换
+ * @returns 格式化后的时间字符串
  */
 export const formatTime = (
   time?: dayjs.ConfigType,
   format: string = "YYYY-MM-DD HH:mm:ss",
-  sourceTimezone: string = "UTC"
+  sourceTimezone?: string | null
 ): string => {
-  if (!time) {
-    // 获取当前本地时间并格式化
-    return dayjs().format(format);
+  // 确保插件已加载
+  if (!dayjs.utc || !dayjs.tz) {
+    console.warn('dayjs utc/timezone plugins not loaded');
+    return dayjs(time).format(format);
   }
   
   try {
     let date;
     
-    // 根据源时区解析时间
-    if (sourceTimezone === 'UTC') {
-      // 对于 UTC 时间，使用 utc 插件解析
-      date = dayjs.utc(time);
-    } else {
-      // 对于其他时区，使用时区插件解析
-      date = dayjs.tz(time, sourceTimezone);
+    // 处理空值情况
+    if (!time) {
+      return dayjs().format(format);
     }
     
-    // 如果解析失败，尝试直接解析
-    if (!date.isValid()) {
+    // 根据源时区解析
+    if (sourceTimezone === 'UTC') {
+      date = dayjs.utc(time);
+    } else if (sourceTimezone) {
+      date = dayjs.tz(time, sourceTimezone);
+    } else {
+      // 不指定源时区，直接解析
       date = dayjs(time);
     }
     
-    // 转换为用户本地时区并格式化
-    return date.tz(dayjs.tz.guess()).format(format);
+    if (!date.isValid()) {
+      console.warn('Invalid date:', time);
+      return 'Invalid Date';
+    }
+    
+    // 只有当源时区不是本地时区时才转换
+    if (sourceTimezone && sourceTimezone !== 'UTC') {
+      try {
+        const localTimezone = dayjs.tz.guess();
+        if (localTimezone && localTimezone !== sourceTimezone) {
+          date = date.tz(localTimezone);
+        }
+      } catch (e) {
+        // 时区猜测失败，保持原时间
+        console.warn('Failed to guess timezone:', e);
+      }
+    } else if (sourceTimezone === 'UTC') {
+      // UTC 时间转换为本地时间
+      try {
+        const localTimezone = dayjs.tz.guess();
+        if (localTimezone) {
+          date = date.tz(localTimezone);
+        } else {
+          // 无法猜测时区，使用本地偏移
+          date = date.local();
+        }
+      } catch (e) {
+        date = date.local();
+      }
+    }
+    
+    return date.format(format);
   } catch (error) {
-    // 如果时区转换失败，尝试直接格式化
-    console.warn('时区转换失败，使用直接格式化:', error);
-    return dayjs(time).format(format);
+    console.error('Format time failed:', error);
+    // 提供安全的降级方案
+    try {
+      return dayjs(time).isValid() ? dayjs(time).format(format) : 'Invalid Date';
+    } catch {
+      return 'Invalid Date';
+    }
   }
 };
