@@ -148,6 +148,29 @@ export const formatTime = (
     // 获取当前本地时间并格式化
     return dayjs().format(format);
   }
-  // 将源时区的时间转换为用户本地时区
-  return dayjs.tz(time, sourceTimezone).tz(dayjs.tz.guess()).format(format);
+  
+  try {
+    let date;
+    
+    // 根据源时区解析时间
+    if (sourceTimezone === 'UTC') {
+      // 对于 UTC 时间，使用 utc 插件解析
+      date = dayjs.utc(time);
+    } else {
+      // 对于其他时区，使用时区插件解析
+      date = dayjs.tz(time, sourceTimezone);
+    }
+    
+    // 如果解析失败，尝试直接解析
+    if (!date.isValid()) {
+      date = dayjs(time);
+    }
+    
+    // 转换为用户本地时区并格式化
+    return date.tz(dayjs.tz.guess()).format(format);
+  } catch (error) {
+    // 如果时区转换失败，尝试直接格式化
+    console.warn('时区转换失败，使用直接格式化:', error);
+    return dayjs(time).format(format);
+  }
 };
