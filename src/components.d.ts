@@ -74,6 +74,7 @@ declare module 'vue' {
     ATypographyText: typeof import('@arco-design/web-vue')['TypographyText']
     AUpload: typeof import('@arco-design/web-vue')['Upload']
     AWatermark: typeof import('@arco-design/web-vue')['Watermark']
+    copy: typeof import('./components/s-layout-search/index copy.vue')['default']
     FileUpload: typeof import('./components/upload/file-upload.vue')['default']
     ImageUpload: typeof import('./components/upload/image-upload.vue')['default']
     'Index copy': typeof import('./components/s-layout-search/index copy.vue')['default']

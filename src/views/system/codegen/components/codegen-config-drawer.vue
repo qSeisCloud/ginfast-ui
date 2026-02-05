@@ -39,6 +39,17 @@
                                     </a-checkbox>
                                 </a-form-item>
                             </a-col>
+                            <a-col :span="12">
+                                <a-form-item label="是否生成树形数据" field="isTree">
+                                    <a-checkbox :model-value="Boolean(editForm.isTree)"
+                                        @update:model-value="editForm.isTree = $event ? 1 : 0">
+                                        是否生成树形数据
+                                    </a-checkbox>
+                                    <template #extra>
+                                        数据库中必须包含parent_id或pid字段且数据类型与主键一致。
+                                    </template>
+                                </a-form-item>
+                            </a-col>
                             <a-col :span="24">
                                 <a-form-item label="描述" field="describe"
                                     :rules="[{ required: true, message: '描述不能为空' }]">
@@ -130,6 +141,7 @@
                                             <a-option value="image">单图上传</a-option>
                                             <a-option value="images">多图上传</a-option>
                                             <a-option value="richtext">富文本</a-option>
+                                            <a-option value="file">文件上传</a-option>
                                         </a-select>
                                     </template>
                                 </a-table-column>
@@ -226,6 +238,7 @@ const editForm = ref<SysGenItem>({
     describe: "",
     isCover: 0,
     isMenu: 0,
+    isTree: 0,
     createdAt: "",
     updatedAt: "",
     deletedAt: null,
@@ -308,6 +321,7 @@ const handleCancel = () => {
         describe: "",
         isCover: 0,
         isMenu: 0,
+        isTree: 0,
         createdAt: "",
         updatedAt: "",
         deletedAt: null,

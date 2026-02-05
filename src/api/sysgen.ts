@@ -11,6 +11,7 @@ export interface SysGenItem {
     describe: string;
     isCover: number;
     isMenu: number;
+    isTree: number;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
