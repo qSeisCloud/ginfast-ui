@@ -12,6 +12,9 @@ export interface SysGenItem {
     isCover: number;
     isMenu: number;
     isTree: number;
+    isRelationTree: number;
+    relationTreeTable: number;
+    relationField: number;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -46,6 +49,7 @@ export interface SysGenListParams {
     pageSize?: number;
     name?: string;
     moduleName?: string;
+    isTree?: number;
 }
 
 // 代码生成配置列表响应
