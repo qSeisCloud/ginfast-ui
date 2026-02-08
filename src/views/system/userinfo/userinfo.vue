@@ -315,8 +315,8 @@ const getUserInfo = async () => {
                 item.value = (userMap as any)[item.key];
             }
         });
-
-          // 当 defaultTenant 非空时，添加租户相关字段
+        //console.log("detail",detail.value)
+        // 当 defaultTenant 非空时，添加租户相关字段
         if (userInfo.value.defaultTenant) {
             detail.value.push({
                 key: "defaultTenant",

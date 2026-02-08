@@ -39,6 +39,51 @@
                                     </a-checkbox>
                                 </a-form-item>
                             </a-col>
+                            <a-col :span="12">
+                                <a-form-item label="是否生成树形数据" field="isTree">
+                                    <a-checkbox :model-value="Boolean(editForm.isTree)"
+                                        @update:model-value="handleIsTreeChange">
+                                        是否生成树形数据
+                                    </a-checkbox>
+                                    <template #extra>
+                                        数据库中须包含id（主键）、name及parent_id字段，且parent_id与主键数据类型需一致。
+                                    </template>
+                                </a-form-item>
+                            </a-col>
+                            <a-col :span="24">
+                                <a-form-item label="是否关联树形数据" field="isRelationTree">
+                                    <a-checkbox :model-value="Boolean(editForm.isRelationTree)"
+                                        @update:model-value="handleIsRelationTreeChange">
+                                        是否关联树形数据
+                                    </a-checkbox>
+                                </a-form-item>
+                            </a-col>
+                            <a-col :span="12" v-if="editForm.isRelationTree === 1">
+                                <a-form-item label="关联树形数据表" field="relationTreeTable">
+                                    <a-select v-model="editForm.relationTreeTable" placeholder="请选择关联树形数据表"
+                                        allow-search allow-clear>
+                                        <a-option :value="0" label="请选择"></a-option>
+                                        <a-option v-for="item in treeTableOptions" :key="item.id" :label="item.name"
+                                            :value="item.id"></a-option>
+                                    </a-select>
+                                    <template #extra>
+                                        请自行确保已经为所选数据表生成了树形数据模块且在同一个目录/模块中,因为前端需要调用相关的API。
+                                    </template>
+                                </a-form-item>
+                            </a-col>
+                            <a-col :span="12" v-if="editForm.isRelationTree === 1">
+                                <a-form-item label="关联字段" field="relationField">
+                                    <a-select v-model="editForm.relationField" placeholder="请选择关联字段" allow-search
+                                        allow-clear>
+                                        <a-option :value="0" label="请选择"></a-option>
+                                        <a-option v-for="item in editForm.sysGenFields" :key="item.id"
+                                            :label="item.customName || item.dataName" :value="item.id"></a-option>
+                                    </a-select>
+                                    <template #extra>
+                                        关联字段需要与关联树形数据表的主键字段类型一致。
+                                    </template>
+                                </a-form-item>
+                            </a-col>
                             <a-col :span="24">
                                 <a-form-item label="描述" field="describe"
                                     :rules="[{ required: true, message: '描述不能为空' }]">
@@ -130,6 +175,7 @@
                                             <a-option value="image">单图上传</a-option>
                                             <a-option value="images">多图上传</a-option>
                                             <a-option value="richtext">富文本</a-option>
+                                            <a-option value="file">文件上传</a-option>
                                         </a-select>
                                     </template>
                                 </a-table-column>
@@ -152,11 +198,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import {
     getSysGenByIdAPI,
     updateSysGenAPI,
-    type SysGenItem
+    getSysGenListAPI,
+    type SysGenItem,
+    type SysGenListParams
 } from "@/api/sysgen";
 import { arcoMessage } from "@/globals";
 import { useDevicesSize } from "@/hooks/useDevicesSize";
@@ -171,6 +219,37 @@ const dictOption = computed(() => {
     }));
 });
 const { isMobile } = useDevicesSize();
+
+// 树形表选项
+const treeTableOptions = ref<Array<{ id: number; name: string }>>([]);
+
+// 加载树形表列表
+const loadTreeTableOptions = async () => {
+    try {
+        const params: SysGenListParams = {
+            pageNum: 1,
+            pageSize: 5000,
+            isTree: 1
+        };
+        const res = await getSysGenListAPI(params);
+        if (res.data?.list) {
+            treeTableOptions.value = res.data.list
+                .map((item: SysGenItem) => ({
+                    id: item.id,
+                    name: item.name
+                }));
+
+            //console.log("树形表列表:", treeTableOptions.value)
+        }
+    } catch (error) {
+        console.error("获取树形表列表失败:", error);
+    }
+};
+
+// 组件挂载时加载树形表选项
+onMounted(() => {
+    loadTreeTableOptions();
+});
 const layoutMode = computed(() => {
     let info = {
         mobile: {
@@ -226,6 +305,10 @@ const editForm = ref<SysGenItem>({
     describe: "",
     isCover: 0,
     isMenu: 0,
+    isTree: 0,
+    isRelationTree: 0,
+    relationTreeTable: 0,
+    relationField: 0,
     createdAt: "",
     updatedAt: "",
     deletedAt: null,
@@ -243,6 +326,31 @@ watch(
         }
     }
 );
+
+// 处理是否生成树形数据变化
+const handleIsTreeChange = (value: boolean) => {
+    editForm.value.isTree = value ? 1 : 0;
+    // 如果勾选了生成树形数据，则取消关联树形数据
+    if (value && editForm.value.isRelationTree === 1) {
+        editForm.value.isRelationTree = 0;
+        editForm.value.relationTreeTable = 0;
+        editForm.value.relationField = 0;
+    }
+};
+
+// 处理是否关联树形数据变化
+const handleIsRelationTreeChange = (value: boolean) => {
+    editForm.value.isRelationTree = value ? 1 : 0;
+    // 如果勾选了关联树形数据，则取消生成树形数据
+    if (value && editForm.value.isTree === 1) {
+        editForm.value.isTree = 0;
+    }
+    // 如果取消关联树形数据，清空关联表和关联字段
+    if (!value) {
+        editForm.value.relationTreeTable = 0;
+        editForm.value.relationField = 0;
+    }
+};
 
 // 加载配置详情
 const loadConfigDetail = async () => {
@@ -308,6 +416,10 @@ const handleCancel = () => {
         describe: "",
         isCover: 0,
         isMenu: 0,
+        isTree: 0,
+        isRelationTree: 0,
+        relationTreeTable: 0,
+        relationField: 0,
         createdAt: "",
         updatedAt: "",
         deletedAt: null,

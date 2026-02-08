@@ -61,9 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
+import { ref, watch } from 'vue';
 import { IconUpload, IconFile, IconDelete, IconDownload, IconRefresh } from '@arco-design/web-vue/es/icon';
-import { uploadAffixAPI, type AffixItem } from '@/api/file';
+import { uploadAffixAPI } from '@/api/file';
 import { Message } from '@arco-design/web-vue';
 
 // 文件信息接口
