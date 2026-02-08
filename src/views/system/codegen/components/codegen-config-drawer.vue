@@ -109,9 +109,14 @@
                                         <a-input v-model="record.dataComment" placeholder="请输入字段描述" />
                                     </template>
                                 </a-table-column>
-                                <a-table-column title="字段类型" :width="120">
+                                <a-table-column title="字段类型" :width="100">
                                     <template #cell="{ record }">
                                         {{ record.dataType }}
+                                    </template>
+                                </a-table-column>
+                                 <a-table-column title="GO类型" :width="100">
+                                    <template #cell="{ record }">
+                                        {{ record.goType }}
                                     </template>
                                 </a-table-column>
                                 <a-table-column title="必填" :width="50" align="center">
