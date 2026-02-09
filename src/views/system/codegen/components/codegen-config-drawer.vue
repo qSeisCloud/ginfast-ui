@@ -96,6 +96,13 @@
                 </a-tab-pane>
                 <a-tab-pane key="2" title="字段信息">
                     <a-card>
+                        <a-alert :show-icon="false"  closable style="margin-bottom: 16px;">
+                            <template #close-element>
+                                <icon-close-circle />
+                            </template>
+                            <p> 1、表单类型为"系统用户选择"或"系统部门选择"时，当字段类型为数值时是单选模式，字段类型为字符串时是多选模式。</p>   
+                            <p> 2、表单类型为单图上传、多图上传、文件上传时，字段类型必须为字符串。</p>   
+                        </a-alert>
                         <a-table row-key="id" :data="editForm.sysGenFields" :bordered="{ cell: true }"
                             :pagination="false" :scroll="{ x: '100%', y: 600 }">
                             <template #columns>
@@ -181,6 +188,9 @@
                                             <a-option value="images">多图上传</a-option>
                                             <a-option value="richtext">富文本</a-option>
                                             <a-option value="file">文件上传</a-option>
+                                            <a-option value="sysuser">系统用户选择</a-option>
+                                            <a-option value="sysdep">系统部门选择</a-option>
+                                             
                                         </a-select>
                                     </template>
                                 </a-table-column>
