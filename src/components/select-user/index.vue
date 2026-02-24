@@ -141,7 +141,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref,  watch } from 'vue';
 import { getAccountListAPI, getAccountDetailAPI } from '@/api/user';
 import type { AccountItem } from '@/api/user';
 

@@ -196,7 +196,7 @@ const loadApiList = async () => {
         if (showSelectedOnly.value && props.menuId) {
             params.menuId = props.menuId;
         }
-        console.log("获取API列表参数:", params);
+        //console.log("获取API列表参数:", params);
         const res = await getSysApiListAPI(params);
         apiList.value = res.data.list;
         pagination.value.total = res.data.total;

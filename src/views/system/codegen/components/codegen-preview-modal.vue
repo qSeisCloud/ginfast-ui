@@ -31,8 +31,7 @@
                         >
                             <template #title="nodeData">
                                 <span class="tree-node-title">
-                                    <icon-file v-if="nodeData.type === 'file'" />
-                                    <icon-folder v-else />
+                                    <icon-folder v-if="nodeData.type === 'directory'" />
                                     <span>{{ nodeData.name }}</span>
                                 </span>
                             </template>
