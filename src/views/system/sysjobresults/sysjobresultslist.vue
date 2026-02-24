@@ -87,12 +87,6 @@ const searchForm = reactive({
     startTimeRange: [],
 });
 
-// 执行状态选项
-const statusOptions = [
-    { label: 'SUCCESS', value: 'SUCCESS' },
-    { label: 'FAILED', value: 'FAILED' },
-    { label: 'PANIC', value: 'PANIC' },
-];
 
 // 分页配置
 const paginationConfig = computed(() => ({

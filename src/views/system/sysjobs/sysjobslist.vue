@@ -470,14 +470,6 @@ const formatExecutionPolicy = (value: number) => {
     return policyMap[value] || '-';
 };
 
-// 格式化任务状态
-const formatStatus = (value: number) => {
-    const statusMap: Record<number, string> = {
-        0: '禁用',
-        1: '启用'
-    };
-    return statusMap[value] || '-';
-};
 
 // 格式化阻塞策略
 const formatBlockingPolicy = (value: number) => {

@@ -306,7 +306,7 @@ const handleSearch = () => {
 };
 
 // 树形多选处理
-const handleTreeCheck = (checkedKeys: any, { checkedNodes }: { checkedNodes: any[] }) => {
+const handleTreeCheck = (_checkedKeys: any, { checkedNodes }: { checkedNodes: any[] }) => {
   if (props.multiple) {
     const ids = checkedNodes.map((node) => node.id);
     tempSelectedIds.value = new Set(ids);
