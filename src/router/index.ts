@@ -62,7 +62,7 @@ router.beforeEach(async (to: any, _: any, next: any) => {
     // 判断路由是否获取，先获取账号信息和路由信息，添加路由后再跳转(页面刷新时触发)
     // 解决刷新页面404的问题
     if (!routeTree.value.length) {
-        const routeStore = useRouteConfigStore(pinia);
+
         try {
             // 并行获取用户信息、路由信息、字典数据
             await Promise.all([useUserStoreHook().getUserInfo(), routeStore.initSetRouter(), useSystemStore().setDictData()]);
