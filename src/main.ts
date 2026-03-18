@@ -15,8 +15,8 @@ import directives from "@/directives/index";
 // 同步加载核心依赖
 import ArcoVue from "@arco-design/web-vue";
 import ArcoVueIcon from "@arco-design/web-vue/es/icon";
-// import "@arco-design/web-vue/dist/arco.css";
-import '@arco-themes/vue-gi-demo/css/arco.css';
+// import "@arco-design/web-vue/dist/arco.css"; // 默认样式
+import '@arco-themes/vue-gi-demo/css/arco.css'; // 自定义主题
 import i18n from "@/lang/index";
 
 
@@ -40,6 +40,7 @@ const loadNonCriticalDependencies = () => {
         try {
             // 异步加载字体
             await import("@/assets/fonts/fonts.scss");
+            // 异步加载主题
             const { initVChartArcoTheme } = await import("@visactor/vchart-arco-theme");
             initVChartArcoTheme();
         } catch (error) {

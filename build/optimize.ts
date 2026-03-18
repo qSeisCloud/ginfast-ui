@@ -10,7 +10,8 @@ const include = [
     "vue-router",
     "pinia",
     "axios",
-    "dayjs"
+    // Arco Design 核心
+    "@arco-design/web-vue",
 ];
 
 /**

@@ -1,22 +1,22 @@
 {
-  "name": "snow-admin",
+  "name": "ginfast-tenant-ui",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "snow-admin open source management system",
+  "description": "ginfast-tenant-ui open source management system",
   "author": {
-    "name": "WANGFan",
-    "email": "2547096351@qq.com",
-    "url": "https://github.com/WANG-Fan0912"
+    "name": "qixunkeji",
+    "email": "396861557@qq.com",
+    "url": "https://github.com/qxkjsoft/ginfast-ui"
   },
   "license": "MIT",
-  "homepage": "https://github.com/WANG-Fan0912/SnowAdmin",
+  "homepage": "https://github.com/qxkjsoft/ginfast-ui",
   "repository": {
     "type": "git",
-    "url": "https://github.com/WANG-Fan0912/SnowAdmin.git"
+    "url": "https://github.com/qxkjsoft/ginfast-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/WANG-Fan0912/SnowAdmin/issues"
+    "url": "https://github.com/qxkjsoft/ginfast-ui/issues"
   },
   "scripts": {
     "dev": "vite",
@@ -69,7 +69,6 @@
     "vue-router": "^4.3.0",
     "vue-virtual-scroller": "2.0.0-beta.8",
     "vuedraggable": "^4.1.0",
-    "xgplayer": "^3.0.18",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

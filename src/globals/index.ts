@@ -195,6 +195,7 @@ export const formatTime = (
           date = date.local();
         }
       } catch (e) {
+        console.warn('Failed to convert UTC to local time:', e);
         date = date.local();
       }
     }
