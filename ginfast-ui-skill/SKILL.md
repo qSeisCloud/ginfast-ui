@@ -1,9 +1,6 @@
 ---
 name: ginfast-ui-skill
-description: GinFast UI 前端开发技能 - 当用户询问前端开发、组件开发、插件开发、API开发、路由配置、权限系统、主题定制时使用。支持Vue3、Vite、TypeScript、Arco Design、Pinia、插件系统等开发场景。
-modeSlugs:
-  - code
-  - architect
+description: GinFast UI frontend development skill. TRIGGER when writing/modifying Vue/TypeScript files, developing components/plugins, creating APIs, configuring routes, implementing permissions, or customizing themes. DO NOT TRIGGER for backend Go development or shell scripts.
 ---
 
 # GinFast UI 开发技能
