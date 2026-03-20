@@ -64,9 +64,11 @@ router.beforeEach(async (to: any, _: any, next: any) => {
     if (!routeTree.value.length) {
 
         try {
-            // 并行获取用户信息、路由信息、字典数据
-            await Promise.all([useUserStoreHook().getUserInfo(), routeStore.initSetRouter(), useSystemStore().setDictData()]);
-            
+            // 获取用户信息、路由信息、字典数据
+            await Promise.all([useUserStoreHook().getUserInfo(), routeStore.initSetRouter()]);
+            useSystemStore().setDictData().catch((err: Error) => {
+                console.warn("字典数据加载失败:", err);
+            });
             if (!routeTree.value.length) {
                 console.warn("路由初始化失败，routeTree为空");
                 // 跳转到401页面
